@@ -25,3 +25,20 @@ Nesta seção será descrito os itens usados para o desenvolvimento do projeto, 
 - **Computador**: qualquer máquina capaz de interpretar programas em python, rodar navegadores e ter pelo menos 2 portas USB.
 
 Também é possível fazer a transmissão das imagens por wi-fi. Neste caso é necessário que o computador seja capaz de se conectar com redes wi-fi e será necessário utilizar programas que captam streams MJPEG e a transforme em uma câmera virtual, como por exemplo o OBS. Neste caso, terá também de ser incluído uma fonte de energia para os ESPs, que pode ser o próprio computador ou uma bateria. Por enquanto, não foi testado a possibilidade do uso das duas câmeras com wi-fi.
+
+### Procedimentos
+
+Para utilizar o ESP32 como webcam USB os seguintes passos:
+1. No Visual Studio Code, procure pela extensão ESP-IDF e a instale;
+2. Baixe o esp-iot-solution no git: https://github.com/espressif/esp-iot-solution.git ;
+3. Abra a pasta baixada no VSC;
+4. Uma página de "Welcome" do ESP-IDF deve abrir. Nela, clique em "Configuring the ESP-IDF Extension" e depois em "Configure ESP-IDF Extension";
+5. Na página de Setup, escolha a opção EXPRESS;
+6. Selecione a versão do ESP-IDF. Neste caso, pode-se baixar uma versão direto do git do ESP-IDF e usar a opção "Find ESP-IDF in your system", ou escolher uma versão para download. No momento da escrita, a última versão é a 5.4.1 e será a usada para este exemplo;
+7. Depois que o download e instalação concluir, abra a pasta "esp-iot-solution/examples/usb/device/usb-webcam" (pelo menu "File" e clicando em "Open folder", não pelo navegador de arquivos);
+8. Plugue o ESP32 no computador;
+9. Na barra inferior do VSC, clique em "COM 1" e escolha a porta em que o seu ESP32 está dentre as opções que aparecerão na parte de cima do VSC;
+10. Clique em "esp32" e escolha a versão do seu ESP32 (neste caso "esp32s3") e depois nescolha a opção "ESP32-S3 via JTAG" (primeira opção). Este processo pode demorar alguns segundos até poucos minutos;
+11. A configuração deve estar pronta, agora basta clicar no botão com ícone de fogo na barra inferior e então será feito o *build*, *flash* e abrir o monitor.
+
+Para fazer a transmissão da imagem da câmera por wi-fi, o processo é semelhante. Ao invés de abrir a pasta citada no paso 7, deverá ser aberta a pasta "esp-iot-solution/examples/camera/video-stream-server". Há também a opção de baixar o esp-who do git: https://github.com/espressif/esp-who.git. Neste caso, deverá ser aberto a pasta "esp-who/examples/human_face_detect" ou ""esp-who/examples/human-face-detection/web" dependendo da versão do esp-who. Nesta versão, o rosto do usuário aparecerá com um quadrado ao redor para identificá-lo, e portanto, a imagem não será limpa.
