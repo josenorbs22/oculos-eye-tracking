@@ -42,3 +42,17 @@ Para utilizar o ESP32 como webcam USB os seguintes passos:
 11. A configuração deve estar pronta, agora basta clicar no botão com ícone de fogo na barra inferior e então será feito o *build*, *flash* e abrir o monitor.
 
 Para fazer a transmissão da imagem da câmera por wi-fi, o processo é semelhante. Ao invés de abrir a pasta citada no paso 7, deverá ser aberta a pasta "esp-iot-solution/examples/camera/video-stream-server". Há também a opção de baixar o esp-who do git: https://github.com/espressif/esp-who.git. Neste caso, deverá ser aberto a pasta "esp-who/examples/human_face_detect" ou ""esp-who/examples/human-face-detection/web" dependendo da versão do esp-who. Nesta versão, o rosto do usuário aparecerá com um quadrado ao redor para identificá-lo, e portanto, a imagem não será limpa.
+
+## Diagramas e dados dos componentes
+
+A placa de desenvolvimento do ESP32-S3 usado neste projeto tem o seguinte *pinout*:
+
+![Pinout do ESP32-S3](/esp32-s3_pinout.png)
+
+O diagrama de pinos das câmeras OV2640 de 24 pinos pode variar de fabricante para fabricante, porém, usando o diagrama fornecido pela página da loja, temos:
+
+![Pinout do OV2640 de 24 pinos](/ov2640_pinout.png)
+
+Temos também algumas especificidades de operação das câmeras OV2640.
+
+![Dados das câmeras OV2640](/ov2640_specs.png)
