@@ -1,0 +1,6 @@
+[submodule "esp-iot-solution"]
+	path = esp-iot-solution
+	url = https://github.com/espressif/esp-iot-solution.git
+[submodule "esp-who"]
+	path = esp-who
+	url = https://github.com/espressif/esp-who.git
