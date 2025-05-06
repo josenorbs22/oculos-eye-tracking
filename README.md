@@ -28,6 +28,8 @@ Também é possível fazer a transmissão das imagens por wi-fi. Neste caso é n
 
 ### Procedimentos
 
+#### Utilização do ESP32 como webcam
+
 Para utilizar o ESP32 como webcam USB os seguintes passos:
 1. No Visual Studio Code, procure pela extensão ESP-IDF e a instale;
 2. Baixe o esp-iot-solution no git: https://github.com/espressif/esp-iot-solution.git ;
@@ -42,6 +44,10 @@ Para utilizar o ESP32 como webcam USB os seguintes passos:
 11. A configuração deve estar pronta, agora basta clicar no botão com ícone de fogo na barra inferior e então será feito o *build*, *flash* e abrir o monitor.
 
 Para fazer a transmissão da imagem da câmera por wi-fi, o processo é semelhante. Ao invés de abrir a pasta citada no paso 7, deverá ser aberta a pasta "esp-iot-solution/examples/camera/video-stream-server". Há também a opção de baixar o esp-who do git: https://github.com/espressif/esp-who.git. Neste caso, deverá ser aberto a pasta "esp-who/examples/human_face_detect" ou ""esp-who/examples/human-face-detection/web" dependendo da versão do esp-who. Nesta versão, o rosto do usuário aparecerá com um quadrado ao redor para identificá-lo, e portanto, a imagem não será limpa.
+
+#### Programa de Captura Web
+
+Para instalar o Programa de Captura Web, siga os passos do README no repositório: https://github.com/LSIIM/Programa-de-Captura-Web . Também deverá ser instalado a API de backend para a aplicação, disponível em: https://github.com/LSIIM/LSIIM-web-api . Em ambos os casos, recomenda-se o uso de containeres através do Docker. O acesso ao banco de dados pode não ser possível.
 
 ## Diagramas e dados dos componentes
 
