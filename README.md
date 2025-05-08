@@ -8,6 +8,23 @@ Este projeto foi desenvolvido dentro do Laboratório de Sinais, IoT e Imagens M�
 
 Óculos feito a partir de modelagem e impressão 3D com câmeras acopladas para filmagem dos olhos e do ponto de vista do usuário para se ter capacidade de traçamento ocular. A câmera dos olhos terá câmeras que captam frequências próximas ao infravermelho (NIR) e a câmera do ponto de vista será uma câmera de ângulo de abertura alto. Estas câmeras, ligadas a um microcontralador ESP32 enviam as imagens em tempo real para um computador por conexão cabeada USB para gravação do procedimento de exame do paciente. Um software desenvolvido no LSIIM então obtém estas gravações e faz o mapeamento da direção do olhar do paciente e de para onde ele está olhando.
 
+## Requisitos
+
+A seguir, consta alguns requisitos, separados em requisitos funcionais e não funcionais, referentes ao projeto desenvolvido na disciplina.
+
+### Requisitos Funcionais
+
+- **RF1**: Transmitir as imagens obtidas pelas câmeras, seja de forma síncrona, em tempo real, ou assíncrona, através de arquivo de vídeo;
+- **RF2**: O óculos deve ter pelo menos uma câmera capaz de capturar imagens com comprimento de onda próximo ao Infravermelho (NIR) apontada para os olhos do usuário;
+- **RF3**: O óculos deve ter uma câmera com ângulo de visão alto para capturar o ponto de vista do usuário;
+- **RF4**: O software de traçamento ocular deve informar a direção do olhar do usuário em relação ao tempo.
+
+### Requisitos Não Funcionais
+
+- **RNF1**: A transmissão ou gravação do vídeo deve ter taxa de quadros constante, ou seja, com o mínimo possível de congelamentos;
+- **RNF2**: A armação deve ter tamanho e formato adequados para o uso de um bebê recém-nascido prematuro;
+- **RNF3**: A relação de direção do olhar por tempo deve ser apresentada de forma clara e legível.
+
 ## Fluxograma de dados do sistema
 
 ![Fluxograma do sistema](/fluxograma_ubiquos.png)
@@ -62,3 +79,11 @@ O diagrama de pinos das câmeras OV2640 de 24 pinos pode variar de fabricante pa
 Temos também algumas especificidades de operação das câmeras OV2640.
 
 ![Dados das câmeras OV2640](/ov2640_specs.png)
+
+## Trabalhos Relacionados
+
+Fazendo-se uma pesquisa em bases de dados, foram achados trabalhos relacionados a formas de se fazer traçamento do olhar com vestíveis, como o óculos desenvolvido no presente trabalho. Também encontrou-se trabalhos que indicam como o traçamento ocular pode ser usado para identificar diversas atipicidades da mente e da visão. Em nenhum destes trabalhos, porém, o aparato de *eye tracking* foi desenvolvido específicamente para este tipo de utilidade médica. Além disso, não foi encontrado trabalhos com a modelagem em 3D do modelo do óculos com suporte para os ESPs e câmeras. Outro ponto é o de que a maioria dos trabalhos focam mais no método de traçamento dos olhos, importando menos o *hardware* usado e como ele foi configurado, o que o presente trabalho toma como maior prioridade. 
+
+## Resultados Esperados
+
+Criar um dispositivo que seja capaz de captar imagens para fazer o traçamento ocular do usuário que possa ser usado para testar a presença de atipicidades visuais e neurológicas de bebês prematuros. Este aparato deverá facilitar e sistematizar o diagnóstico que já é realizado de forma manual e menos precisa. Este projeto também visa viabilizar o desenvolvimento de um modelo de Inteligência Artificial que indique de forma automatizada a presença de possíveis doenças ou anomalias do sistema visual e nervoso do paciente.
