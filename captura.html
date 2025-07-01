@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Gravação Simultânea de Streams Separadas com Configuração de IP</title>
+  <style>
+    canvas {
+      border: 1px solid #333;
+      margin: 5px;
+    }
+    .controls, .stream-config {
+      margin: 10px 0;
+    }
+    .stream-config label {
+      margin-right: 5px;
+    }
+    .stream-config input {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Configuração das Streams: Campos de texto para definir os endereços IP/URL -->
+  <div class="stream-config">
+    <label for="ipStream1">IP/URL da Stream 1:</label>
+    <input type="text" id="ipStream1" value="http://192.168.137.93:80/stream">
+    <br>
+    <label for="ipStream2">IP/URL da Stream 2:</label>
+    <input type="text" id="ipStream2" value="http://192.168.137.249:80/stream">
+    <br>
+    <button id="updateStreamsBtn">Atualizar Streams</button>
+    <p>
+      Ao clicar em "Atualizar Streams", os endereços das streams serão aplicados aos <code>&lt;img&gt;</code> ocultos que alimentam os canvases.
+    </p>
+  </div>
+
+  <!-- Elementos de imagem para as streams MJPEG (ficam ocultos) -->
+  <img id="stream1" src="http://192.168.137.93:80/stream" crossorigin="anonymous" alt="Stream 1" style="display: none;">
+  <img id="stream2" src="http://192.168.137.249:80/stream" crossorigin="anonymous" alt="Stream 2" style="display: none;">
+
+  <!-- Canvases separados para cada stream -->
+  <canvas id="canvas1" width="320" height="240"></canvas>
+  <canvas id="canvas2" width="320" height="240"></canvas>
+  
+  <!-- Botões unificados para iniciar e parar a gravação para ambas as streams -->
+  <div class="controls">
+    <button id="startBtn">Iniciar Gravação</button>
+    <button id="stopBtn" disabled>Parar Gravação</button>
+  </div>
+  
+  <!-- Elementos de vídeo para exibir as gravações -->
+  <div class="controls">
+    <video id="recordedVideo1" controls width="320" height="240"></video>
+    <video id="recordedVideo2" controls width="320" height="240"></video>
+  </div>
+  
+  <script>
+    // --- Configuração dos inputs de endereço e botão para atualizar as streams ---
+    const ipStream1Input = document.getElementById('ipStream1');
+    const ipStream2Input = document.getElementById('ipStream2');
+    const updateStreamsBtn = document.getElementById('updateStreamsBtn');
+
+    // Elementos <img> que alimentam os canvases.
+    const stream1Img = document.getElementById('stream1');
+    const stream2Img = document.getElementById('stream2');
+
+    // Atualiza as URLs dos elementos <img> com os valores dos campos de texto.
+    updateStreamsBtn.addEventListener('click', () => {
+      stream1Img.src = ipStream1Input.value;
+      stream2Img.src = ipStream2Input.value;
+      console.log("Streams atualizadas:", stream1Img.src, stream2Img.src);
+    });
+
+    // --- Configuração da Stream 1 ---
+    const canvas1 = document.getElementById('canvas1');
+    const ctx1 = canvas1.getContext('2d');
+    const recordedVideo1 = document.getElementById('recordedVideo1');
+
+    // --- Configuração da Stream 2 ---
+    const canvas2 = document.getElementById('canvas2');
+    const ctx2 = canvas2.getContext('2d');
+    const recordedVideo2 = document.getElementById('recordedVideo2');
+
+    // Botões unificados para controle das gravações
+    const startBtn = document.getElementById('startBtn');
+    const stopBtn = document.getElementById('stopBtn');
+
+    // Variáveis para os MediaRecorders e dados gravados
+    let mediaRecorder1, mediaRecorder2;
+    let recordedChunks1 = [], recordedChunks2 = [];
+
+    // Captura dos streams dos canvases (25 fps)
+    const canvasStream1 = canvas1.captureStream(25);
+    const canvasStream2 = canvas2.captureStream(25);
+
+    // Funções para desenhar os canvases continuamente
+    function drawCanvas1() {
+      ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+      // Desenha a stream 1; se não estiver carregada, não desenha nada.
+      ctx1.drawImage(stream1Img, 0, 0, canvas1.width, canvas1.height);
+      requestAnimationFrame(drawCanvas1);
+    }
+    function drawCanvas2() {
+      ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+      ctx2.drawImage(stream2Img, 0, 0, canvas2.width, canvas2.height);
+      requestAnimationFrame(drawCanvas2);
+    }
+    
+    // Inicia os loops de desenho após o carregamento da página
+    window.addEventListener('load', () => {
+      drawCanvas1();
+      drawCanvas2();
+    });
+
+    // Evento para iniciar as gravações simultaneamente
+    startBtn.addEventListener('click', () => {
+      // Limpa dados gravados anteriormente
+      recordedChunks1 = [];
+      recordedChunks2 = [];
+      
+      try {
+        mediaRecorder1 = new MediaRecorder(canvasStream1, { mimeType: "video/webm; codecs=vp9" });
+        mediaRecorder2 = new MediaRecorder(canvasStream2, { mimeType: "video/webm; codecs=vp9" });
+      } catch (e) {
+        console.error("Erro ao iniciar MediaRecorder:", e);
+        return;
+      }
+      
+      // Configuração do MediaRecorder para stream 1
+      mediaRecorder1.ondataavailable = event => {
+        if (event.data && event.data.size > 0) {
+          recordedChunks1.push(event.data);
+        }
+      };
+      mediaRecorder1.onstop = () => {
+        const blob1 = new Blob(recordedChunks1, { type: "video/webm" });
+        const url1 = URL.createObjectURL(blob1);
+        recordedVideo1.src = url1;
+        
+        // Cria um link para download da gravação da Stream 1
+        const downloadLink1 = document.createElement('a');
+        downloadLink1.href = url1;
+        downloadLink1.download = 'stream1_record.webm';
+        downloadLink1.textContent = 'Baixar gravação da Stream 1';
+        document.body.appendChild(downloadLink1);
+      };
+
+      // Configuração do MediaRecorder para stream 2
+      mediaRecorder2.ondataavailable = event => {
+        if (event.data && event.data.size > 0) {
+          recordedChunks2.push(event.data);
+        }
+      };
+      mediaRecorder2.onstop = () => {
+        const blob2 = new Blob(recordedChunks2, { type: "video/webm" });
+        const url2 = URL.createObjectURL(blob2);
+        recordedVideo2.src = url2;
+        
+        const downloadLink2 = document.createElement('a');
+        downloadLink2.href = url2;
+        downloadLink2.download = 'stream2_record.webm';
+        downloadLink2.textContent = 'Baixar gravação da Stream 2';
+        document.body.appendChild(downloadLink2);
+      };
+
+      // Inicia ambos os MediaRecorders
+      mediaRecorder1.start();
+      mediaRecorder2.start();
+      
+      startBtn.disabled = true;
+      stopBtn.disabled = false;
+    });
+
+    // Evento para parar as gravações simultaneamente
+    stopBtn.addEventListener('click', () => {
+      mediaRecorder1.stop();
+      mediaRecorder2.stop();
+      startBtn.disabled = false;
+      stopBtn.disabled = true;
+    });
+
+    updateStreamsBtn.addEventListener('click', () => {
+        const timestamp = new Date().getTime();
+        stream1Img.src = ipStream1Input.value + '?t=' + timestamp;
+        stream2Img.src = ipStream2Input.value + '?t=' + timestamp;
+        console.log("Streams atualizadas:", stream1Img.src, stream2Img.src);
+        });
+  </script>
+</body>
+</html>
