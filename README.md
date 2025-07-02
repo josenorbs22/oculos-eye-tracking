@@ -6,7 +6,7 @@ Este projeto foi desenvolvido dentro do Laboratório de Sinais, IoT e Imagens M�
 
 ## Descrição do objeto de desenvolvimento
 
-Óculos feito a partir de modelagem e impressão 3D com câmeras acopladas para filmagem dos olhos e do ponto de vista do usuário para se ter capacidade de traçamento ocular. A câmera dos olhos terá câmeras que captam frequências próximas ao infravermelho (NIR) e a câmera do ponto de vista será uma câmera de ângulo de abertura alto. Estas câmeras, ligadas a um microcontralador ESP32 enviam as imagens em tempo real para um computador por conexão cabeada USB para gravação do procedimento de exame do paciente. Um software desenvolvido no LSIIM então obtém estas gravações e faz o mapeamento da direção do olhar do paciente e de para onde ele está olhando.
+Óculos feito a partir de modelagem e impressão 3D com câmeras acopladas para filmagem dos olhos e do ponto de vista do usuário para se ter capacidade de traçamento ocular. A câmera dos olhos terá câmeras que captam frequências próximas ao infravermelho (NIR) e a câmera do ponto de vista será uma câmera de ângulo de abertura alto. Estas câmeras, ligadas a um microcontralador ESP32 enviam as imagens em tempo real para um computador por conexão WiFi para gravação do procedimento de exame do paciente. Um aplicativo Javascript obtém as imagens transmitidas em um Servidor Web fornecido pelo ESP32 através de Wifi e faz a captura sincronizada do feed das duas câmeras. Um software desenvolvido no LSIIM então obtém estas gravações e faz o mapeamento da direção do olhar do paciente e de para onde ele está olhando.
 
 ## Requisitos
 
